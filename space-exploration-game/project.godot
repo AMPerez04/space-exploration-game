@@ -11,8 +11,13 @@ config_version=5
 [application]
 
 config/name="space-exploration-game"
+run/main_scene="uid://cmux2re4fugk3"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
+
+[autoload]
+
+GameManager="*res://game_manager.tscn"
 
 [rendering]
 
