@@ -2,6 +2,7 @@
 extends Control
 
 @onready var rp_label: Label = $VBoxContainer/RPLabel
+@onready var rps_label: Label = $VBoxContainer/RPSLabel
 @onready var click_button: Button = $VBoxContainer/ClickButton
 @onready var generator_list: VBoxContainer = $ScrollContainer/GeneratorList
 
@@ -22,6 +23,9 @@ func _ready():
 func _process(_delta):
 	# Update the main RP label every frame.
 	rp_label.text = "%.2f" % GameManager.research_points
+	
+	var total_rps = GameManager.calculate_total_rps()
+	rps_label.text = "(%.2f RP/s)" % total_rps
 	
 	# Increment our timer
 	ui_update_timer += _delta
@@ -56,8 +60,11 @@ func update_ui():
 		var cost = GameManager.get_generator_cost(gen_id)
 		var can_afford = GameManager.research_points >= cost
 		
-		# Call the row's own function to update its labels and buttons.
-		row.set_data(gen_data, count, cost, can_afford)
+		# NEW: Get the multiplier from the GameManager
+		var multiplier = GameManager.calculate_generator_multiplier(gen_id)
+		
+		# Call the row's own function to update its labels and buttons, now with the multiplier.
+		row.set_data(gen_data, count, cost, can_afford, multiplier) # Add multiplier here
 		i += 1
 
 func _on_generator_buy_pressed(generator_id: String):

@@ -19,3 +19,9 @@ extends Resource
 
 ## Which stage this generator belongs to (we'll use this later).
 # @export_enum("Earth", "Moon", "Mars") var stage: String = "Earth"
+
+## The levels at which this generator gets a production bonus (e.g., 25, 50, 100).
+@export var multiplier_milestones: Array[int] = [10, 25, 50, 100, 200, 300, 400, 500]
+
+## The production multiplier gained at each milestone (e.g., 2.0 for x2 speed).
+@export var production_multiplier: float = 2.0

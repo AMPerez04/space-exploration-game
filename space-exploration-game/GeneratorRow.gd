@@ -13,14 +13,16 @@ signal buy_pressed(generator_id)
 var generator_id: String
 
 # This function will be called from the main scene to set up the row's data.
-func set_data(gen_data: GeneratorData, current_count: int, current_cost: float, can_afford: bool):
+func set_data(gen_data: GeneratorData, current_count: int, current_cost: float, can_afford: bool, current_multiplier: float):
 	self.generator_id = gen_data.id
 	
 	name_label.text = gen_data.display_name
 	count_label.text = "Owned: %d" % current_count
-	rps_label.text = "%.2f RP/s each" % gen_data.base_rps
 	
-	# We can use a custom function for large number formatting later.
+	# UPDATED: Calculate and show the *boosted* RP/s value
+	var boosted_rps = gen_data.base_rps * current_multiplier
+	rps_label.text = "%.2f RP/s each" % boosted_rps
+	
 	buy_button.text = "Buy (%.1f RP)" % current_cost
 	buy_button.disabled = not can_afford
 

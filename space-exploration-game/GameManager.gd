@@ -14,7 +14,6 @@ var owned_generators: Dictionary = {
 	"private_company": 0,
 	"supercomputer_cluster": 0,
 	"global_ai_network": 0,
-	"quantum_lab": 0,
 	# We'll add Moon and Mars generators later
 }
 
@@ -27,9 +26,12 @@ var _generator_data_map: Dictionary = {}
 
 func _ready():
 	# Build the helper map for fast access instead of looping through the array every time.
-	print(all_generators) 
+
 	for gen_data in all_generators:
 		_generator_data_map[gen_data.id] = gen_data
+		# NEW: Pre-sort the milestone arrays for efficient calculation later.
+		if gen_data.multiplier_milestones:
+			gen_data.multiplier_milestones.sort()
 	
 	print("GameManager is ready!")
 	# For testing, let's start with some RP
@@ -47,7 +49,12 @@ func calculate_total_rps() -> float:
 		var count = owned_generators[generator_id]
 		if count > 0:
 			var gen_data: GeneratorData = _generator_data_map[generator_id]
-			total_rps += gen_data.base_rps * count
+			# Get the multiplier for this specific generator
+			var multiplier = calculate_generator_multiplier(generator_id)
+			# Apply the multiplier to the base production rate
+			var boosted_rps = gen_data.base_rps * multiplier
+			# Add the total production from all generators of this type
+			total_rps += boosted_rps * count
 	return total_rps
 
 # Calculates the current cost of a specific generator.
@@ -70,3 +77,23 @@ func buy_generator(generator_id: String):
 func manual_research_click():
 	research_points += manual_click_power
 	# We can add sound effects or visual feedback here later!
+
+func calculate_generator_multiplier(generator_id: String) -> float:
+	var total_multiplier: float = 1.0
+	var gen_data: GeneratorData = _generator_data_map.get(generator_id)
+	var count = owned_generators.get(generator_id, 0)
+	
+	if not gen_data:
+		return 1.0
+
+	# Loop through the milestones (we pre-sorted them in _ready)
+	for milestone_level in gen_data.multiplier_milestones:
+		if count >= milestone_level:
+			# If we've reached the milestone, apply the multiplier
+			total_multiplier *= gen_data.production_multiplier
+		else:
+			# Since the list is sorted, we can stop checking once we find a milestone
+			# we haven't reached yet.
+			break
+			
+	return total_multiplier
