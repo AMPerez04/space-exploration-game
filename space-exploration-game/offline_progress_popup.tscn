@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://cfta23sekc65w"]
+
+[ext_resource type="Script" uid="uid://dtosohd6wcedj" path="res://offline_progress_popup.gd" id="1_5jitm"]
+
+[node name="OfflineProgressPopup" type="PanelContainer"]
+offset_right = 88.0
+offset_bottom = 58.0
+script = ExtResource("1_5jitm")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="InfoLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="OkButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Awesome!"

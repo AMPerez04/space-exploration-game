@@ -6,6 +6,8 @@ extends Control
 @onready var click_button: Button = $VBoxContainer/ClickButton
 @onready var generator_list: VBoxContainer = $ScrollContainer/GeneratorList
 
+const OfflinePopupScene = preload("res://offline_progress_popup.tscn")
+var offline_popup
 
 const UI_UPDATE_INTERVAL = 0.25 
 var ui_update_timer = 0.0
@@ -14,11 +16,23 @@ var ui_update_timer = 0.0
 const GeneratorRowScene = preload("res://generator_row.tscn")
 
 func _ready():
+	offline_popup = OfflinePopupScene.instantiate()
+	add_child(offline_popup)
+	offline_popup.hide()
+	
+	GameManager.offline_progress_calculated.connect(on_offline_progress)
+	
+	
+	
 	click_button.pressed.connect(GameManager.manual_research_click)
 		
 	# Initial UI population
 	populate_generator_list()
 	update_ui()
+	
+func on_offline_progress(seconds, rp_earned):
+	print("DEBUG: Main UI received signal. Telling popup to show.")
+	offline_popup.show_progress(seconds, rp_earned)
 
 func _process(_delta):
 	# Update the main RP label every frame.
