@@ -3,9 +3,8 @@
 [ext_resource type="Script" uid="uid://dtosohd6wcedj" path="res://offline_progress_popup.gd" id="1_5jitm"]
 
 [node name="OfflineProgressPopup" type="PanelContainer"]
-offset_left = 755.0
 offset_top = 100.0
-offset_right = 961.0
+offset_right = 1080.0
 offset_bottom = 158.0
 script = ExtResource("1_5jitm")
 

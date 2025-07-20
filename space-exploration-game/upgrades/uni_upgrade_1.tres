@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=3 format=3 uid="uid://c4hgo62a5j3yt"]
+
+[ext_resource type="Script" uid="uid://br32axswd8b10" path="res://UpgradeData.gd" id="1_e2gpn"]
+[ext_resource type="Texture2D" uid="uid://dt3sw6358mndn" path="res://assets/university_curriculum.png" id="1_j5ne3"]
+
+[resource]
+script = ExtResource("1_e2gpn")
+id = "university_curriculum_1"
+display_name = "Improved Curriculum"
+description = "Doubles the output of all Universities."
+icon = ExtResource("1_j5ne3")
+cost = 5000.0
+target_generator_id = "university"
+production_multiplier = 2.0
+metadata/_custom_type_script = "uid://br32axswd8b10"

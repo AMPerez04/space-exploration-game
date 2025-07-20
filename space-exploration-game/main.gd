@@ -1,10 +1,11 @@
 # main.gd
 extends Control
 
-@onready var rp_label: Label = $VBoxContainer/RPLabel
-@onready var rps_label: Label = $VBoxContainer/RPSLabel
-@onready var click_button: Button = $VBoxContainer/ClickButton
-@onready var generator_list: VBoxContainer = $ScrollContainer/GeneratorList
+@onready var rp_label: Label = $ScreenLayout/GameArea/VBoxContainer/RPLabel
+@onready var rps_label: Label = $ScreenLayout/GameArea/VBoxContainer/RPSLabel
+@onready var click_button: Button = $ScreenLayout/GameArea/VBoxContainer/ClickButton
+@onready var generator_list: VBoxContainer = $ScreenLayout/TabContainer/Generators/GeneratorList
+@onready var upgrade_list: VBoxContainer = $ScreenLayout/TabContainer/Upgrades/UpgradeList
 
 const OfflinePopupScene = preload("res://offline_progress_popup.tscn")
 var offline_popup
@@ -14,6 +15,8 @@ var ui_update_timer = 0.0
 
 # Preload the scene we'll be instancing.
 const GeneratorRowScene = preload("res://generator_row.tscn")
+const UpgradeRowScene = preload("res://upgrade_row.tscn")
+
 
 func _ready():
 	offline_popup = OfflinePopupScene.instantiate()
@@ -28,6 +31,7 @@ func _ready():
 		
 	# Initial UI population
 	populate_generator_list()
+	populate_upgrades_list()
 	update_ui()
 	
 func on_offline_progress(seconds, rp_earned):
@@ -48,6 +52,7 @@ func _process(_delta):
 	if ui_update_timer >= UI_UPDATE_INTERVAL:
 		# If so, update the entire UI and reset the timer
 		update_ui()
+		update_upgrades_ui()
 		ui_update_timer = 0.0
 
 # This function runs once to create the UI rows.
@@ -85,3 +90,26 @@ func _on_generator_buy_pressed(generator_id: String):
 	GameManager.buy_generator(generator_id)
 	# After buying, immediately update the whole UI to reflect the new state.
 	update_ui()
+
+func populate_upgrades_list():
+	for upg_data in GameManager.all_upgrades:
+		var row = UpgradeRowScene.instantiate()
+		upgrade_list.add_child(row)
+		row.buy_pressed.connect(_on_upgrade_buy_pressed)
+
+func update_upgrades_ui():
+	var i = 0
+	for upg_data in GameManager.all_upgrades:
+		var row = upgrade_list.get_child(i)
+		
+		# Hide upgrades that are already purchased
+		if GameManager.purchased_upgrades.has(upg_data.id):
+			row.hide()
+		else:
+			row.show()
+			var can_afford = GameManager.research_points >= upg_data.cost
+			row.set_data(upg_data, can_afford)
+		i += 1
+
+func _on_upgrade_buy_pressed(upgrade_id: String):
+	GameManager.buy_upgrade(upgrade_id)

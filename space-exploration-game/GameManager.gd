@@ -21,6 +21,11 @@ var owned_generators: Dictionary = {
     "global_ai_network": 0,
     # We'll add Moon and Mars generators later
 }
+            
+var purchased_upgrades: Dictionary = {}
+
+@export var all_upgrades: Array[UpgradeData]
+var _upgrade_data_map: Dictionary = {}
 
 ## An array to hold all our GeneratorData resources.
 ## We link them here in the Inspector.
@@ -37,6 +42,9 @@ func _ready():
         if gen_data.multiplier_milestones:
             gen_data.multiplier_milestones.sort()
             
+    for upg_data in all_upgrades:
+        _upgrade_data_map[upg_data.id] = upg_data
+        
     if not load_game():
         # ...then this must be a new game. Set up the initial state.
         print("Setting up a new game.")
@@ -113,6 +121,14 @@ func calculate_generator_multiplier(generator_id: String) -> float:
             # we haven't reached yet.
             break
             
+    for purchased_id in purchased_upgrades:
+        var upg_data: UpgradeData = _upgrade_data_map.get(purchased_id)
+        if not upg_data: continue
+        
+        # Check if this upgrade applies to the current generator OR to "all"
+        if upg_data.target_generator_id == generator_id or upg_data.target_generator_id == "all":
+            total_multiplier *= upg_data.production_multiplier
+            
     return total_multiplier
 
 # ... At the end of GameManager.gd ...
@@ -123,7 +139,7 @@ func save_game():
     var save_data = {
         "research_points": research_points,
         "owned_generators": owned_generators,
-        # CRUCIAL: Store the exact time of the save.
+        "purchased_upgrades": purchased_upgrades,
         "last_save_time": Time.get_unix_time_from_system() 
     }
     
@@ -167,6 +183,7 @@ func load_game() -> bool:
     # Use .get() with a default value for safety in case a key is missing.
     research_points = save_data.get("research_points", 0.0)
     owned_generators = save_data.get("owned_generators", {}) # Start with empty dict if missing
+    purchased_upgrades = save_data.get("purchased_upgrades", {})
     var last_save_time = save_data.get("last_save_time", 0)
     
     if last_save_time > 0:
@@ -192,3 +209,15 @@ func load_game() -> bool:
 func _notification(what):
     if what == NOTIFICATION_WM_CLOSE_REQUEST or what == NOTIFICATION_APPLICATION_PAUSED:
         save_game()
+        
+func buy_upgrade(upgrade_id: String):
+    var upg_data: UpgradeData = _upgrade_data_map.get(upgrade_id)
+    if not upg_data: return
+    
+    # Check if already purchased or can't afford
+    if purchased_upgrades.has(upgrade_id) or research_points < upg_data.cost:
+        return
+
+    research_points -= upg_data.cost
+    purchased_upgrades[upgrade_id] = true
+    print("Purchased upgrade: ", upgrade_id)

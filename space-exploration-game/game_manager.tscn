@@ -1,12 +1,16 @@
-[gd_scene load_steps=7 format=3 uid="uid://c05snwxyrgd3r"]
+[gd_scene load_steps=10 format=3 uid="uid://c05snwxyrgd3r"]
 
 [ext_resource type="Script" uid="uid://berm1kdyu0q6l" path="res://GameManager.gd" id="1_70yv6"]
+[ext_resource type="Script" uid="uid://br32axswd8b10" path="res://UpgradeData.gd" id="2_gth8u"]
 [ext_resource type="Script" uid="uid://ckn3lbl6vcb0b" path="res://GeneratorData.gd" id="2_shwjl"]
+[ext_resource type="Resource" uid="uid://c4hgo62a5j3yt" path="res://upgrades/uni_upgrade_1.tres" id="3_dq8jp"]
 [ext_resource type="Resource" uid="uid://ddwql7qbr8wl" path="res://generators/university.tres" id="3_eakoi"]
 [ext_resource type="Resource" uid="uid://by3oxemgo34pg" path="res://generators/private_company.tres" id="4_8jrwq"]
+[ext_resource type="Resource" uid="uid://c624wxny530g1" path="res://upgrades/global_upgrade_1.tres" id="4_yawsv"]
 [ext_resource type="Resource" uid="uid://cxoyrat8bb4hg" path="res://generators/supercomputer_cluster.tres" id="5_gth8u"]
 [ext_resource type="Resource" uid="uid://cejn8dh35yvr1" path="res://generators/global_ai_network.tres.tres" id="6_dq8jp"]
 
 [node name="GameManager" type="Node"]
 script = ExtResource("1_70yv6")
+all_upgrades = Array[ExtResource("2_gth8u")]([ExtResource("3_dq8jp"), ExtResource("4_yawsv")])
 all_generators = Array[ExtResource("2_shwjl")]([ExtResource("3_eakoi"), ExtResource("4_8jrwq"), ExtResource("5_gth8u"), ExtResource("6_dq8jp")])
