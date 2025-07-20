@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="GeneratorData" load_steps=2 format=3 uid="uid://cxoyrat8bb4hg"]
+[gd_resource type="Resource" script_class="GeneratorData" load_steps=3 format=3 uid="uid://cxoyrat8bb4hg"]
 
+[ext_resource type="Texture2D" uid="uid://cn8us8ofmvacf" path="res://assets/supercomputer_cluster.png" id="1_ddahu"]
 [ext_resource type="Script" uid="uid://ckn3lbl6vcb0b" path="res://GeneratorData.gd" id="1_wij6w"]
 
 [resource]
@@ -9,4 +10,7 @@ display_name = "Supercomputer Cluster"
 base_cost = 2500.0
 base_rps = 8.0
 cost_multiplier = 1.12
+multiplier_milestones = Array[int]([10, 25, 50, 100, 200, 300, 400, 500])
+production_multiplier = 2.0
+icon = ExtResource("1_ddahu")
 metadata/_custom_type_script = "uid://ckn3lbl6vcb0b"

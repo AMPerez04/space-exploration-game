@@ -25,3 +25,5 @@ extends Resource
 
 ## The production multiplier gained at each milestone (e.g., 2.0 for x2 speed).
 @export var production_multiplier: float = 2.0
+
+@export var icon: Texture2D

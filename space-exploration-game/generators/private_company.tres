@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="GeneratorData" load_steps=2 format=3 uid="uid://by3oxemgo34pg"]
+[gd_resource type="Resource" script_class="GeneratorData" load_steps=3 format=3 uid="uid://by3oxemgo34pg"]
 
+[ext_resource type="Texture2D" uid="uid://0o1ta7htgyf8" path="res://assets/private_company.png" id="1_olf7j"]
 [ext_resource type="Script" uid="uid://ckn3lbl6vcb0b" path="res://GeneratorData.gd" id="1_y2ydt"]
 
 [resource]
@@ -9,4 +10,7 @@ display_name = "Private Research Co."
 base_cost = 200.0
 base_rps = 1.0
 cost_multiplier = 1.09
+multiplier_milestones = Array[int]([10, 25, 50, 100, 200, 300, 400, 500])
+production_multiplier = 2.0
+icon = ExtResource("1_olf7j")
 metadata/_custom_type_script = "uid://ckn3lbl6vcb0b"
